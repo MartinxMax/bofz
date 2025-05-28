@@ -26,7 +26,8 @@ if [ $# -lt 1 ]; then
   echo -e "${RED}[×${RED}[\xd7] Usage: $0 <executable path> [-stack <string>]${RESET}"
   exit 1
 fi
- 
+
+# 解析参数
 while [[ "$#" -gt 0 ]]; do
   case $1 in
     -stack)
@@ -58,10 +59,7 @@ for size in $(seq 1 $MAX); do
       exit 0
     fi
   else
-    if echo "$result" | grep -q 'stack smashing detected'; then
-      printf "\n${RED}[!] Stack smashing detected at: %d bytes${RESET}\n" "$size"
-      exit 0
-    elif [ $status -eq 139 ]; then
+    if [ $status -eq 139 ]; then
       printf "\n${RED}[!] Buffer overflow (SIGSEGV) detected at: %d bytes${RESET}\n" "$size"
       exit 0
     fi
